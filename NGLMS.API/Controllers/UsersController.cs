@@ -10,18 +10,24 @@ namespace NGLMS.API.Controllers
     public class UsersController : CustomBaseController
     {
         private readonly IMapper _mapper;
-        private readonly IService<User> _service;
+        private readonly IUserService _userService;
 
-        public UsersController(IMapper mapper, IService<User> service)
+        public UsersController(IMapper mapper, IService<User> service, IUserService userService)
         {
             _mapper = mapper;
-            _service = service;
+            _userService = userService;
         }
+
+        //[HttpGet("[action]")]
+        //public async Task<IActionResult> Test()
+        //{
+        //    return await _userService.GetAllAsync();
+        //}
 
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            var users = await _service.GetAllAsync();
+            var users = await _userService.GetAllAsync();
             var userDtos = _mapper.Map<List<UserDto>>(users.ToList());
             return CreateActionResult(CustomResponseDto<List<UserDto>>.Success(200, userDtos));
         }
@@ -29,7 +35,7 @@ namespace NGLMS.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var user = await _service.GetByIdAsync(id);
+            var user = await _userService.GetByIdAsync(id);
             var userDto = _mapper.Map<UserDto>(user);
             return CreateActionResult(CustomResponseDto<UserDto>.Success(200, userDto));
         }
@@ -37,7 +43,7 @@ namespace NGLMS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(UserDto paramUserDto)
         {
-            var user = await _service.AddAsync(_mapper.Map<User>(paramUserDto));
+            var user = await _userService.AddAsync(_mapper.Map<User>(paramUserDto));
             var userDto = _mapper.Map<UserDto>(user);
             return CreateActionResult(CustomResponseDto<UserDto>.Success(201, userDto));
         }
@@ -45,16 +51,16 @@ namespace NGLMS.API.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(UserDto paramUserDto)
         {
-            await _service.UpdateAsync(_mapper.Map<User>(paramUserDto));
-            return CreateActionResult(CustomResponseDto<UserDto>.Success(204));
+            await _userService.UpdateAsync(_mapper.Map<User>(paramUserDto));
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _service.GetByIdAsync(id);
-            await _service.RemoveAsync(user);
-            return CreateActionResult(CustomResponseDto<UserDto>.Success(204));
+            var user = await _userService.GetByIdAsync(id);
+            await _userService.RemoveAsync(user);
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
     }
 }

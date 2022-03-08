@@ -18,9 +18,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRespository<>));
 builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 
 builder.Services.AddDbContext<AppDbContext>(x =>

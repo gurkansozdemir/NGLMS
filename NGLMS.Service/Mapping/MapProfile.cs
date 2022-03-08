@@ -9,6 +9,9 @@ namespace NGLMS.Service.Mapping
         public MapProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Message, MessageDto>().ReverseMap();
+            CreateMap<Chat, ChatDto>().ReverseMap();
+            CreateMap<Chat, ChatWithMessage>();
         }
     }
 }
